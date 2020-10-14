@@ -34,31 +34,58 @@ public class MyHashTable<T> {
 
     /*Inserts the key/value into the hashtable*/
     public boolean insert(int key, T value) {
-
+        int homeIndex = hashFunction(key);
+        int collisions = 0;
+        if (hashMap[homeIndex].isNormal() && hashMap[homeIndex].getKey() != key) {
+            int nextIndex = probeFunction(homeIndex, collisions++);
+            while (hashMap[nextIndex].isNormal()&& collisions<HASH_TABLE_SIZE) {
+                if (hashMap[nextIndex].getKey() == key) {
+                    System.out.println("Duplicate Key");
+                    return false;
+                }
+                nextIndex = probeFunction(homeIndex, collisions++);
+            }
+            Record<T> insertThis = new Record<T>(key, value);
+            hashMap[nextIndex] = insertThis;
+            currentSize++;
+        } else if (hashMap[homeIndex].getKey() == key) {
+            System.out.println("Duplicate Key");
+            return false;
+        } else {
+            Record<T> insertThis = new Record<T>(key, value);
+            hashMap[homeIndex] = insertThis;
+            currentSize++;
+        }
         return true;
     }
+
     /*Kills a table key and returns the associated value*/
     public T remove(int key) {
 
         return null;
     }
-    
+
     /*Returns the load factor for the hash*/
     public double alpha() {
-        return this.currentSize/this.HASH_TABLE_SIZE;
+        return this.currentSize / this.HASH_TABLE_SIZE;
     }
 
     /*Hash function for finding the home position*/
     private int hashFunction(int key) {
-        return 0;
+        return key % HASH_TABLE_SIZE;
     }
 
     /*The result of probing is returned with the new slot's position*/
     private int probeFunction(int homeIndex, int collisions) {
-        return 0;
+        int newIndex = homeIndex + collisions;
+        if( newIndex > HASH_TABLE_SIZE){
+            newIndex = 0;
+        }
+        return newIndex;
+
     }
-        
-    public String toString(){
+
+    public String toString() {
         String table = "";
         for (int i = 0; i < this.HASH_TABLE_SIZE; i++) {
             table += i + ". " + hashMap[i].toString() + "\n";

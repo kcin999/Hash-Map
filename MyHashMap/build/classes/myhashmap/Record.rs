@@ -1,0 +1,2 @@
+myhashmap.RecordType
+myhashmap.Record
