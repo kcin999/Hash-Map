@@ -37,7 +37,7 @@ public class MyHashMapDriver {
         }
         System.out.println(myTable);
         System.out.println(addedKeys);
-        System.out.println("\nTESTING FINDING ELEMENTS");//All should be found and be true.
+        System.out.println("\nTESTING FINDING ELEMENTS: Should be true");//All should be found and be true.
         for (int i = 0; i < addedKeys.size(); i += 2) {
             int key = addedKeys.get(i);
             System.out.println("The value " + key + " found: " + myTable.find(key, key));
@@ -51,14 +51,14 @@ public class MyHashMapDriver {
         }
         System.out.println(myTable);
 
-        System.out.println("\nTESTING FINDING REMOVED ELEMENTS");//all should be false
+        System.out.println("\nTESTING FINDING REMOVED ELEMENTS: Should be false");//all should be false
         for (int i = 0; i < addedKeys.size(); i += 2) {
             int key = addedKeys.get(i);
             System.out.println("The value " + key + " found: " + myTable.find(key, key));
         }
         System.out.println(myTable);
 
-        System.out.println("\nTESTING FINDING VALID ELEMENTS AFTER REMOVAL");//Want these to be true
+        System.out.println("\nTESTING FINDING VALID ELEMENTS AFTER REMOVAL: Should be true");//Want these to be true
         for (int i = 1; i < addedKeys.size(); i += 2) {
             int key = addedKeys.get(i);
             System.out.println("The value " + key + " found: " + myTable.find(key, key));

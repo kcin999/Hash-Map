@@ -29,7 +29,22 @@ public class MyHashTable<T> {
 
     /*Finds an element with a certain key and stores it in the value passed*/
     public boolean find(int key, T value) {
-        return false;
+        int homeIndex = hashFunction(key);
+        int collisions = 0;
+        if (hashMap[homeIndex].getKey() == key) {
+            value = hashMap[homeIndex].getValue();
+            return true;
+        } else {
+            int nextIndex = probeFunction(homeIndex, collisions++);
+            while (hashMap[nextIndex].getKey() != key && collisions < HASH_TABLE_SIZE) {
+                nextIndex = probeFunction(homeIndex, collisions++);
+            }
+            if (collisions >= HASH_TABLE_SIZE) {
+                return false;
+            }
+            value = hashMap[homeIndex].getValue();
+            return true;
+        }
     }
 
     /*Inserts the key/value into the hashtable*/
