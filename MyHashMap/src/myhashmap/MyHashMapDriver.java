@@ -36,7 +36,7 @@ public class MyHashMapDriver {
             }
         }
         System.out.println(myTable);
-
+        System.out.println(addedKeys);
         System.out.println("\nTESTING FINDING ELEMENTS");//All should be found and be true.
         for (int i = 0; i < addedKeys.size(); i += 2) {
             int key = addedKeys.get(i);

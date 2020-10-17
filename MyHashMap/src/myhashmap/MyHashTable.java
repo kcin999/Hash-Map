@@ -60,7 +60,7 @@ public class MyHashTable<T> {
     }
 
     /*Kills a table key and returns the associated value*/
-    public T remove(int key) {
+public T remove(int key) {
 
         return null;
     }
@@ -78,7 +78,7 @@ public class MyHashTable<T> {
     /*The result of probing is returned with the new slot's position*/
     private int probeFunction(int homeIndex, int collisions) {
         int newIndex = homeIndex + collisions;
-        if( newIndex > HASH_TABLE_SIZE){
+        if( newIndex >= HASH_TABLE_SIZE){
             newIndex = 0;
         }
         return newIndex;
