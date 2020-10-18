@@ -30,54 +30,49 @@ public class MyHashTable<T> {
     /*Finds an element with a certain key and stores it in the value passed*/
     public boolean find(int key, T value) {
         int homeIndex = hashFunction(key);
+        int checkIndex = homeIndex;
         int collisions = 0;
-        if (hashMap[homeIndex].getKey() == key) {
-            value = hashMap[homeIndex].getValue();
-            return true;
-        } else {
-            int nextIndex = probeFunction(homeIndex, collisions++);
-            while (hashMap[nextIndex].getKey() != key && collisions < HASH_TABLE_SIZE) {
-                nextIndex = probeFunction(homeIndex, collisions++);
-            }
-            if (collisions >= HASH_TABLE_SIZE) {
-                return false;
-            }
-            value = hashMap[homeIndex].getValue();
-            return true;
+        while(hashMap[checkIndex].getKey() != key &&collisions< HASH_TABLE_SIZE){
+            checkIndex = probeFunction(homeIndex,collisions++);
         }
+        if(collisions>=HASH_TABLE_SIZE || !hashMap[checkIndex].isNormal()){
+            return false;
+        }
+        value = hashMap[checkIndex].getValue();
+        return true;
     }
 
     /*Inserts the key/value into the hashtable*/
     public boolean insert(int key, T value) {
         int homeIndex = hashFunction(key);
+        int checkIndex = homeIndex;
         int collisions = 0;
-        if (hashMap[homeIndex].isNormal() && hashMap[homeIndex].getKey() != key) {
-            int nextIndex = probeFunction(homeIndex, collisions++);
-            while (hashMap[nextIndex].isNormal()&& collisions<HASH_TABLE_SIZE) {
-                if (hashMap[nextIndex].getKey() == key) {
-                    System.out.println("Duplicate Key");
-                    return false;
-                }
-                nextIndex = probeFunction(homeIndex, collisions++);
-            }
-            Record<T> insertThis = new Record<T>(key, value);
-            hashMap[nextIndex] = insertThis;
-            currentSize++;
-        } else if (hashMap[homeIndex].getKey() == key) {
-            System.out.println("Duplicate Key");
-            return false;
-        } else {
-            Record<T> insertThis = new Record<T>(key, value);
-            hashMap[homeIndex] = insertThis;
-            currentSize++;
+        
+        while(hashMap[checkIndex].isNormal() &&collisions<HASH_TABLE_SIZE){
+            checkIndex = probeFunction(homeIndex,++collisions);
         }
+        if(collisions>=HASH_TABLE_SIZE && hashMap[checkIndex].getKey() == key){
+            return false;
+        }
+        Record<T> insertThis = new Record<T>(key,value);
+        hashMap[checkIndex] = insertThis;
+        currentSize++;
         return true;
     }
 
     /*Kills a table key and returns the associated value*/
-public T remove(int key) {
-
-        return null;
+    public T remove(int key) {
+        int homeIndex = hashFunction(key);
+        int checkIndex = homeIndex;
+        int collisions = 0;
+        while(hashMap[checkIndex].getKey() != key && collisions <HASH_TABLE_SIZE){
+            checkIndex = probeFunction(homeIndex, collisions++);
+        }
+        if(collisions >=HASH_TABLE_SIZE){
+            return null;
+        }
+        hashMap[checkIndex].deleteRecord();
+        return hashMap[checkIndex].getValue();
     }
 
     /*Returns the load factor for the hash*/
@@ -93,8 +88,8 @@ public T remove(int key) {
     /*The result of probing is returned with the new slot's position*/
     private int probeFunction(int homeIndex, int collisions) {
         int newIndex = homeIndex + collisions;
-        if( newIndex >= HASH_TABLE_SIZE){
-            newIndex = 0;
+        if (newIndex >= HASH_TABLE_SIZE) {
+            newIndex = newIndex-HASH_TABLE_SIZE;
         }
         return newIndex;
 
