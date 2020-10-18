@@ -46,12 +46,12 @@ public class MyHashTable<T> {
     public boolean insert(int key, T value) {
         int homeIndex = hashFunction(key);
         int checkIndex = homeIndex;
-        int collisions = 0;
+        collisionsForThisInsert = 0;
         
-        while(this.hashMap[checkIndex].isNormal() &&collisions<this.HASH_TABLE_SIZE){
-            checkIndex = probeFunction(homeIndex,++collisions);
+        while(this.hashMap[checkIndex].isNormal() &&collisionsForThisInsert<this.HASH_TABLE_SIZE){
+            checkIndex = probeFunction(homeIndex,++collisionsForThisInsert);
         }
-        if(collisions>=this.HASH_TABLE_SIZE && this.hashMap[checkIndex].getKey() == key){
+        if(collisionsForThisInsert>=this.HASH_TABLE_SIZE && this.hashMap[checkIndex].getKey() == key){
             return false;
         }
         Record<T> insertThis = new Record<T>(key,value);

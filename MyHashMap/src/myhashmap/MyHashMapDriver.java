@@ -17,8 +17,8 @@ import java.util.Scanner;
 public class MyHashMapDriver {
 
     public static void main(String[] args) throws FileNotFoundException {
-        debuggingFunctions();
-        //completeAnalysis();
+        //debuggingFunctions();
+        completeAnalysis();
         //readWriteData();
 
     }
@@ -68,42 +68,56 @@ public class MyHashMapDriver {
     }
 
     public static void completeAnalysis() {
+        ArrayList<Double> averageArrayList = new ArrayList<Double>();
         MyHashTable<Integer> myTable = new MyHashTable<Integer>(1009);
         for (int i = 0; i < 1009; i++) {
             int key_value = (int) (Math.random() * 1000000);
-            if(i == 100 || i == 201 || i == 302 || i == 403 || i == 504 || i ==605 || i == 706 || i == 807 || i == 908 || i == 1007){
-                // add the item
-                // collect the number of collisions.
-                //remove the item just added
-                //repeat 19 more times
+            if (i == 100 || i == 201 || i == 302 || i == 403 || i == 504 || i == 605 || i == 706 || i == 807 || i == 908 || i == 1007) {
+                int totalCollisions = 0;
+                for (int j = 0; j < 20; j++) {
+                    // add the item
+                    if (myTable.insert(key_value, key_value)) {
+                        // collect the number of collisions.
+                        totalCollisions = totalCollisions + myTable.collisionsForThisInsert;
+                        //remove the item just added
+                        myTable.remove(key_value);
+                    } else {
+                        j--;
+                    }
+                    key_value = (int) (Math.random() * 1000000);
+
+                }
                 //average the number of collisions that occured
-            }
-            else if (! myTable.insert(key_value, key_value)) {
+                double average = totalCollisions / 20.000;
+                averageArrayList.add(average);
+            } else if (!myTable.insert(key_value, key_value)) {
                 i--; //Don't count the insert if key already in table
             }
-        }
 
+        }
+        System.out.println(averageArrayList);
     }
-    
+
     /**
      * This part is unnecessary for all levels other than A. It is a brief
      * example of how to read and write from a file.
-     * @throws FileNotFoundException 
+     *
+     * @throws FileNotFoundException
      */
-    public static void readWriteData() throws FileNotFoundException{
+    public static void readWriteData() throws FileNotFoundException {
         //How to print to a file.  OVERWRITES
         PrintWriter outFile = new PrintWriter("output.txt");
         //outFile == System.out
         System.out.println("Hello World");
         outFile.println("Hello World");
         outFile.close();
-        
+
         //Reading Files
         File file = new File("output.txt");
         Scanner input = new Scanner(file);
-        
+
         int value = input.nextInt();
-        
+
     }
 
 }
