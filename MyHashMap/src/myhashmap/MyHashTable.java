@@ -32,13 +32,13 @@ public class MyHashTable<T> {
         int homeIndex = hashFunction(key);
         int checkIndex = homeIndex;
         int collisions = 0;
-        while(hashMap[checkIndex].getKey() != key &&collisions< HASH_TABLE_SIZE){
-            checkIndex = probeFunction(homeIndex,collisions++);
+        while(this.hashMap[checkIndex].getKey() != key &&collisions< this.HASH_TABLE_SIZE){
+            checkIndex = probeFunction(homeIndex,++collisions);
         }
-        if(collisions>=HASH_TABLE_SIZE || !hashMap[checkIndex].isNormal()){
+        if(collisions>=this.HASH_TABLE_SIZE || !this.hashMap[checkIndex].isNormal()){
             return false;
         }
-        value = hashMap[checkIndex].getValue();
+        value = this.hashMap[checkIndex].getValue();
         return true;
     }
 
@@ -48,15 +48,15 @@ public class MyHashTable<T> {
         int checkIndex = homeIndex;
         int collisions = 0;
         
-        while(hashMap[checkIndex].isNormal() &&collisions<HASH_TABLE_SIZE){
+        while(this.hashMap[checkIndex].isNormal() &&collisions<this.HASH_TABLE_SIZE){
             checkIndex = probeFunction(homeIndex,++collisions);
         }
-        if(collisions>=HASH_TABLE_SIZE && hashMap[checkIndex].getKey() == key){
+        if(collisions>=this.HASH_TABLE_SIZE && this.hashMap[checkIndex].getKey() == key){
             return false;
         }
         Record<T> insertThis = new Record<T>(key,value);
-        hashMap[checkIndex] = insertThis;
-        currentSize++;
+        this.hashMap[checkIndex] = insertThis;
+        this.currentSize++;
         return true;
     }
 
@@ -65,14 +65,15 @@ public class MyHashTable<T> {
         int homeIndex = hashFunction(key);
         int checkIndex = homeIndex;
         int collisions = 0;
-        while(hashMap[checkIndex].getKey() != key && collisions <HASH_TABLE_SIZE){
-            checkIndex = probeFunction(homeIndex, collisions++);
+        while(this.hashMap[checkIndex].getKey() != key && collisions <this.HASH_TABLE_SIZE){
+            checkIndex = probeFunction(homeIndex, ++collisions);
         }
-        if(collisions >=HASH_TABLE_SIZE){
+        if(collisions >=this.HASH_TABLE_SIZE){
             return null;
         }
-        hashMap[checkIndex].deleteRecord();
-        return hashMap[checkIndex].getValue();
+        this.hashMap[checkIndex].deleteRecord();
+        this.currentSize--;
+        return this.hashMap[checkIndex].getValue();
     }
 
     /*Returns the load factor for the hash*/
@@ -82,14 +83,14 @@ public class MyHashTable<T> {
 
     /*Hash function for finding the home position*/
     private int hashFunction(int key) {
-        return key % HASH_TABLE_SIZE;
+        return key % this.HASH_TABLE_SIZE;
     }
 
     /*The result of probing is returned with the new slot's position*/
     private int probeFunction(int homeIndex, int collisions) {
         int newIndex = homeIndex + collisions;
-        if (newIndex >= HASH_TABLE_SIZE) {
-            newIndex = newIndex-HASH_TABLE_SIZE;
+        if (newIndex >= this.HASH_TABLE_SIZE) {
+            newIndex = newIndex-this.HASH_TABLE_SIZE;
         }
         return newIndex;
 
