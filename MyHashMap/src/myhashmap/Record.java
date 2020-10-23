@@ -27,31 +27,40 @@ enum RecordType {
 
 public class Record<T> {
 
-    //INT RECORDS
-    /* private int key;
+     private int keyInt;
+     private String keyString;
     //Generic Data Type.  Takes the type T so that it's always usable for all object types
     private T value;
     private RecordType type;
 
     public Record() {
-        key = 0;
+        keyInt = 0;
         type = RecordType.emptyRecord;
     }
 
     public Record(int newkey, T newValue) {
-        this.key = newkey;
+        this.keyInt = newkey;
         this.value = newValue;
         type = RecordType.normalRecord;
     }
-
+    
+    public Record(String newKey, T newValue){
+        this.keyString = newKey;
+        this.value = newValue;
+        type = RecordType.normalRecord;
+    }
     // Convert a record to a tombstone
     public void deleteRecord() {
         type = RecordType.tombstone;
     }
 
     // Get the integer key of a record
-    public int getIntKey() {
-        return key;
+    public int getKeyInt() {
+        return keyInt;
+    }
+    //Get the String key of a record
+    public String getKeyString(){
+        return keyString;
     }
 
     // Get the value of a record
@@ -82,66 +91,8 @@ public class Record<T> {
         } else if (isEmpty()) {
             return "<<Empty>>";
         } else {
-            return "Key: " + key + ", Value: " + value;
+            return "Key: " + keyString + ", Value: " + value;
         }
     }
-     */
-    //STRING RECORD
-    private String key;
-    //Generic Data Type.  Takes the type T so that it's always usable for all object types
-    private T value;
-    private RecordType type;
-
-    public Record() {
-        key = null;
-        type = RecordType.emptyRecord;
-    }
-
-    public Record(String newkey, T newValue) {
-        this.key = newkey;
-        this.value = newValue;
-        type = RecordType.normalRecord;
-    }
-
-    // Convert a record to a tombstone
-    public void deleteRecord() {
-        type = RecordType.tombstone;
-    }
-
-    // Get the String key of a record
-    public String getKey() {
-        return key;
-    }
-
-    // Get the value of a record
-    public T getValue() {
-        return value;
-    }
-
-    // Check if a record is empty
-    public boolean isEmpty() {
-        return (type == RecordType.emptyRecord);
-    }
-
-    // Check if a record is a normal record
-    public boolean isNormal() {
-        return (type == RecordType.normalRecord);
-    }
-
-    // Check if a record is a tombstone
-    public boolean isTombstone() {
-        return (type == RecordType.tombstone);
-    }
-
-    // Overload the toString operator for printing records
-    @Override
-    public String toString() {
-        if (isTombstone()) {
-            return "<<Tombstone>>";
-        } else if (isEmpty()) {
-            return "<<Empty>>";
-        } else {
-            return "Key: " + key + ", Value: " + value;
-        }
-    }
+ 
 }

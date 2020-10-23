@@ -37,12 +37,14 @@ public class MyHashTable<T> {
     }
 
     /*Finds an element with a certain key and stores it in the value passed*/
-    public boolean find(/*int key*/String key, T value) {
+    
+    //INTEGERS
+    public boolean find(int key, T value) {
         int homeIndex = hashFunction(key);
         int checkIndex = homeIndex;
         int collisions = 0;
-  //      while (this.hashMap[checkIndex].getKey() != key && collisions < this.HASH_TABLE_SIZE) {
-        while (!this.hashMap[checkIndex].getKey().equals(key) && collisions < this.HASH_TABLE_SIZE) {
+        while (this.hashMap[checkIndex].getKeyInt() != key && collisions < this.HASH_TABLE_SIZE) {
+
             checkIndex = probeFunction(homeIndex, ++collisions);
         }
         if (collisions >= this.HASH_TABLE_SIZE || !this.hashMap[checkIndex].isNormal()) {
@@ -53,7 +55,7 @@ public class MyHashTable<T> {
     }
 
     /*Inserts the key/value into the hashtable*/
-    public boolean insert(/*int key*/ String key, T value) {
+    public boolean insert(int key, T value) {
         int homeIndex = hashFunction(key);
         int checkIndex = homeIndex;
         collisionsForThisInsert = 0;
@@ -61,8 +63,7 @@ public class MyHashTable<T> {
         while (this.hashMap[checkIndex].isNormal() && collisionsForThisInsert < this.HASH_TABLE_SIZE) {
             checkIndex = probeFunction(homeIndex, ++collisionsForThisInsert);
         }
-     //   if (collisionsForThisInsert >= this.HASH_TABLE_SIZE && this.hashMap[checkIndex].getKey() == key) {//for integers
-        if (collisionsForThisInsert >= this.HASH_TABLE_SIZE && this.hashMap[checkIndex].getKey().equals(key)) {
+        if (collisionsForThisInsert >= this.HASH_TABLE_SIZE && this.hashMap[checkIndex].getKeyInt() == key) {
             return false;
         }
         Record<T> insertThis = new Record<T>(key, value);
@@ -72,12 +73,12 @@ public class MyHashTable<T> {
     }
 
     /*Kills a table key and returns the associated value*/
-    public T remove(/*int key*/ String key) {
+    public T remove(int key) {
         int homeIndex = hashFunction(key);
         int checkIndex = homeIndex;
         int collisions = 0;
-       // while (this.hashMap[checkIndex].getKey() != key && collisions < this.HASH_TABLE_SIZE) {//for Integers
-        while (!this.hashMap[checkIndex].getKey().equals(key) && collisions < this.HASH_TABLE_SIZE) {
+        while (this.hashMap[checkIndex].getKeyInt() != key && collisions < this.HASH_TABLE_SIZE) {
+  
             checkIndex = probeFunction(homeIndex, ++collisions);
         }
         if (collisions >= this.HASH_TABLE_SIZE) {
@@ -94,17 +95,76 @@ public class MyHashTable<T> {
     }
 
     /*Hash function for finding the home position*/
-    private int hashFunction(/*int key*/ String key) {
-        //return (int) (HASH_TABLE_SIZE * (.3657 * key % 1)); //Multiplication Key Integers
+    private int hashFunction(int key) {
+        return (int) (HASH_TABLE_SIZE * (.3657 * key % 1)); //Multiplication Key Integers
         //return key % this.HASH_TABLE_SIZE; // Modular Key
-        //string Key
-        int hashCode = 0;
-        for (int i = 0; i < key.length(); i++) {
-            hashCode = hashCode + (int)(Math.pow((double)(key.charAt(i)*31),(double)(key.length()-(i+1))));
+        
+    }
+    
+    //STRINGS
+     /*Finds an element with a certain key and stores it in the value passed*/
+    public boolean find(String key, T value) {
+        int homeIndex = hashFunction(key);
+        int checkIndex = homeIndex;
+        int collisions = 0;
+
+        while (!this.hashMap[checkIndex].getKeyString().equals(key) && collisions < this.HASH_TABLE_SIZE) {
+            checkIndex = probeFunction(homeIndex, ++collisions);
         }
-        return hashCode%HASH_TABLE_SIZE;
+        if (collisions >= this.HASH_TABLE_SIZE || !this.hashMap[checkIndex].isNormal()) {
+            return false;
+        }
+        value = this.hashMap[checkIndex].getValue();
+        return true;
     }
 
+    /*Inserts the key/value into the hashtable*/
+    public boolean insert(String key, T value) {
+        int homeIndex = hashFunction(key);
+        int checkIndex = homeIndex;
+        collisionsForThisInsert = 0;
+
+        while (this.hashMap[checkIndex].isNormal() && collisionsForThisInsert < this.HASH_TABLE_SIZE) {
+            checkIndex = probeFunction(homeIndex, ++collisionsForThisInsert);
+        }
+        if (collisionsForThisInsert >= this.HASH_TABLE_SIZE && this.hashMap[checkIndex].getKeyString().equals(key)) {
+            return false;
+        }
+        Record<T> insertThis = new Record<T>(key, value);
+        this.hashMap[checkIndex] = insertThis;
+        this.currentSize++;
+        return true;
+    }
+
+    /*Kills a table key and returns the associated value*/
+    public T remove(String key) {
+        int homeIndex = hashFunction(key);
+        int checkIndex = homeIndex;
+        int collisions = 0;
+        while (!this.hashMap[checkIndex].getKeyString().equals(key) && collisions < this.HASH_TABLE_SIZE) {
+            checkIndex = probeFunction(homeIndex, ++collisions);
+        }
+        if (collisions >= this.HASH_TABLE_SIZE) {
+            return null;
+        }
+        this.hashMap[checkIndex].deleteRecord();
+        this.currentSize--;
+        return this.hashMap[checkIndex].getValue();
+    }
+
+
+    /*Hash function for finding the home position*/
+    private int hashFunction(String key) {
+        //string Key
+        int hash = key.hashCode()%HASH_TABLE_SIZE;
+        return Math.abs(hash);
+//        int hashCode = 0;
+//        for (int i = 0; i < key.length(); i++) {
+//            hashCode = hashCode + (int)(Math.pow((double)(key.charAt(i)*31),(double)(key.length()-(i+1))));
+//        }
+//        return hashCode%HASH_TABLE_SIZE;
+    }
+    //PROBE FUNCTION
     /*The result of probing is returned with the new slot's position*/
     private int probeFunction(int homeIndex, int collisions) {
         return (homeIndex + (collisions*this.psuedoRandomSequence[homeIndex])) % this.HASH_TABLE_SIZE;//Psuedorandom Probe
