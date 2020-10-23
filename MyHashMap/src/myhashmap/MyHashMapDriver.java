@@ -19,11 +19,11 @@ public class MyHashMapDriver {
     public static void main(String[] args) throws FileNotFoundException {
         //debuggingFunctions();
         //completeAnalysis();
-        readWriteData();
-
+        //readWriteData();
+        completeAnalysisStringKey();
     }
 
-    /*public static void debuggingFunctions() {
+    public static void debuggingFunctions() {
         MyHashTable<Integer> myTable = new MyHashTable<Integer>(7);//Can be changed to any prime number
         ArrayList<Integer> addedKeys = new ArrayList<Integer>();
         System.out.println("TESTING ADDING ELEMENTS");
@@ -65,8 +65,8 @@ public class MyHashMapDriver {
         }
         System.out.println(myTable);
 
-    }*/
-/*
+    }
+    
     public static void completeAnalysis() {
         ArrayList<Double> averageArrayList = new ArrayList<Double>();
         MyHashTable<Integer> myTable = new MyHashTable<Integer>(1009);
@@ -97,7 +97,8 @@ public class MyHashMapDriver {
         }
         System.out.println(averageArrayList);
     }
-*/
+    
+
     /**
      * This part is unnecessary for all levels other than A. It is a brief
      * example of how to read and write from a file.
@@ -116,17 +117,72 @@ public class MyHashMapDriver {
         File file = new File("billionaires.csv");
         Scanner input = new Scanner(file);
         input.nextLine();
-        
-        ArrayList<String> nameList = new ArrayList();
-        while(input.hasNext()){
+
+        ArrayList<String> rowData = new ArrayList();
+        while (input.hasNext()) {
             String[] line = input.nextLine().split(",");
-            
+
             String names = line[0].trim();
-            
-            nameList.add(names);
+
+            rowData.add(names);
         }
-        System.out.println(nameList);
+        System.out.println(rowData);
         input.close();
     }
 
+    public static ArrayList getData(String fileName, int indexOfData) throws FileNotFoundException {
+
+        //Reading Files
+        File file = new File(fileName);
+        Scanner input = new Scanner(file);
+        input.nextLine();
+
+        ArrayList<String> rowData = new ArrayList();
+        while (input.hasNext()) {
+            String[] line = input.nextLine().split(",");
+
+            String names = line[indexOfData].trim();
+
+            rowData.add(names);
+        }
+        input.close();
+        return rowData;
+    }
+
+    
+    public static void completeAnalysisStringKey() throws FileNotFoundException {
+        ArrayList<String> fileData = getData("billionaires.csv",0);
+        ArrayList<Double> averageArrayList = new ArrayList<Double>();
+        MyHashTable<String> myTable = new MyHashTable<String>(2609);
+        
+        for (int i = 0; i < fileData.size(); i++) {
+            int index_value = (int) (Math.random() * fileData.size());
+            String key_value = fileData.get(index_value);
+            if (i == 521 || i == 1042 || i == 1563 || i == 2084 || i == 2605) {
+                int totalCollisions = 0;
+                for (int j = 0; j < 20; j++) {
+                    // add the item
+                    if (myTable.insert(key_value, key_value)) {
+                        // collect the number of collisions.
+                        totalCollisions = totalCollisions + myTable.collisionsForThisInsert;
+                        //remove the item just added
+                        myTable.remove(key_value);
+                    } else {
+                        j--;
+                    }
+                    index_value = (int) (Math.random() * fileData.size());
+                    key_value = fileData.get(index_value);
+                }
+                //average the number of collisions that occured
+                double average = totalCollisions / 20.000;
+                averageArrayList.add(average);
+            } else if (!myTable.insert(key_value, key_value)) {
+                i--; //Don't count the insert if key already in table
+            }
+
+        }
+        System.out.println(averageArrayList);
+        
+        
+    }
 }
