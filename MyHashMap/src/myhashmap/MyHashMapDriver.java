@@ -18,12 +18,12 @@ public class MyHashMapDriver {
 
     public static void main(String[] args) throws FileNotFoundException {
         //debuggingFunctions();
-        completeAnalysis();
-        //readWriteData();
+        //completeAnalysis();
+        readWriteData();
 
     }
 
-    public static void debuggingFunctions() {
+    /*public static void debuggingFunctions() {
         MyHashTable<Integer> myTable = new MyHashTable<Integer>(7);//Can be changed to any prime number
         ArrayList<Integer> addedKeys = new ArrayList<Integer>();
         System.out.println("TESTING ADDING ELEMENTS");
@@ -65,8 +65,8 @@ public class MyHashMapDriver {
         }
         System.out.println(myTable);
 
-    }
-
+    }*/
+/*
     public static void completeAnalysis() {
         ArrayList<Double> averageArrayList = new ArrayList<Double>();
         MyHashTable<Integer> myTable = new MyHashTable<Integer>(1009);
@@ -97,7 +97,7 @@ public class MyHashMapDriver {
         }
         System.out.println(averageArrayList);
     }
-
+*/
     /**
      * This part is unnecessary for all levels other than A. It is a brief
      * example of how to read and write from a file.
@@ -105,19 +105,28 @@ public class MyHashMapDriver {
      * @throws FileNotFoundException
      */
     public static void readWriteData() throws FileNotFoundException {
-        //How to print to a file.  OVERWRITES
-        PrintWriter outFile = new PrintWriter("output.txt");
-        //outFile == System.out
-        System.out.println("Hello World");
-        outFile.println("Hello World");
-        outFile.close();
+//        //How to print to a file.  OVERWRITES
+//        PrintWriter outFile = new PrintWriter("output.txt");
+//        //outFile == System.out
+//        System.out.println("Hello World");
+//        outFile.println("Hello World");
+//        outFile.close();
 
         //Reading Files
-        File file = new File("output.txt");
+        File file = new File("billionaires.csv");
         Scanner input = new Scanner(file);
-
-        int value = input.nextInt();
-
+        input.nextLine();
+        
+        ArrayList<String> nameList = new ArrayList();
+        while(input.hasNext()){
+            String[] line = input.nextLine().split(",");
+            
+            String names = line[0].trim();
+            
+            nameList.add(names);
+        }
+        System.out.println(nameList);
+        input.close();
     }
 
 }
