@@ -17,8 +17,8 @@ import java.util.Scanner;
 public class MyHashMapDriver {
 
     public static void main(String[] args) throws FileNotFoundException {
-        //debuggingFunctions();
-        //completeAnalysis();
+        debuggingFunctions();
+        completeAnalysis();
         //readWriteData();
         completeAnalysisStringKey();
     }
